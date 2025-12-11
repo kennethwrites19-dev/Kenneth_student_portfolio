@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Student Portfolio{% endblock %}</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Rajdhani:wght@400;600&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='site.css') }}" />
+
+    <style>
+      /* --- GLOBAL THEME (Applies to all pages) --- */
+      html, body {
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+        font-family: 'Rajdhani', sans-serif;
+        background: radial-gradient(circle at center, #1bffff 0%, #00214d 100%);
+        background-attachment: fixed; /* Keeps bg still while scrolling */
+        color: #d0d0d0;
+        overflow-x: hidden;
+      }
+
+      /* Animated Grid Background */
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background: repeating-linear-gradient(
+            to right,
+            rgba(0, 255, 255, 0.05) 0px,
+            rgba(0, 255, 255, 0.05) 1px,
+            transparent 1px,
+            transparent 60px
+          ),
+          repeating-linear-gradient(
+            to bottom,
+            rgba(0, 255, 255, 0.05) 0px,
+            rgba(0, 255, 255, 0.05) 1px,
+            transparent 1px,
+            transparent 60px
+          );
+        animation: gridmove 20s linear infinite;
+        z-index: -1; 
+        pointer-events: none; 
+      }
+
+      @keyframes gridmove {
+        from { background-position: 0 0; }
+        to { background-position: 60px 60px; }
+      }
+
+      /* --- NAVBAR STYLES --- */
+      .navbar {
+        background: rgba(10, 15, 20, 0.95);
+        border-bottom: 1px solid rgba(0, 255, 255, 0.3);
+        box-shadow: 0 0 20px rgba(0, 255, 255, 0.1);
+        padding: 1rem 2rem;
+        display: flex;
+        justify-content: center; /* Center the links */
+        gap: 30px;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        backdrop-filter: blur(5px);
+      }
+
+      .navbar a {
+        color: #d0d0d0;
+        text-decoration: none;
+        font-family: 'Orbitron', sans-serif;
+        font-weight: 500;
+        font-size: 1.1rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        transition: all 0.3s ease;
+        position: relative;
+      }
+
+      .navbar a:hover {
+        color: #00ffff;
+        text-shadow: 0 0 8px #00ffff;
+        transform: translateY(-2px);
+      }
+
+      /* Active/Hover underline effect */
+      .navbar a::after {
+        content: '';
+        position: absolute;
+        width: 0;
+        height: 2px;
+        bottom: -5px;
+        left: 0;
+        background-color: #00ffff;
+        box-shadow: 0 0 10px #00ffff;
+        transition: width 0.3s ease;
+      }
+
+      .navbar a:hover::after {
+        width: 100%;
+      }
+
+      /* --- FLASH MESSAGES --- */
+      .flash-area {
+        max-width: 800px;
+        margin: 20px auto;
+        padding: 0 20px;
+        position: relative;
+        z-index: 10;
+      }
+
+      .alert {
+        padding: 15px;
+        margin-bottom: 10px;
+        border: 1px solid;
+        border-radius: 6px;
+        background: rgba(0, 0, 0, 0.8);
+        font-family: 'Orbitron', sans-serif;
+        text-align: center;
+        box-shadow: 0 0 15px rgba(0,0,0,0.5);
+      }
+
+      /* Success (Green/Cyan) */
+      .alert-success {
+        border-color: #00ff9d;
+        color: #00ff9d;
+        box-shadow: 0 0 10px rgba(0, 255, 157, 0.2);
+      }
+
+      /* Error/Danger (Red/Orange) */
+      .alert-danger, .alert-error {
+        border-color: #ff3333;
+        color: #ff3333;
+        box-shadow: 0 0 10px rgba(255, 51, 51, 0.2);
+      }
+
+      /* --- CONTENT WRAPPER --- */
+      .content {
+        padding: 20px;
+        min-height: 80vh; /* Ensures footer (if added) stays down */
+      }
+    </style>
+  </head>
+  <body>
+    
+    <div class="navbar">
+      <a href="{{ url_for('home') }}">Home</a>
+      
+      {% if current_user.is_authenticated %} 
+        
+        {% if current_user.is_admin %}
+          <a href="{{ url_for('admin_dashboard') }}" style="color: #ff00ff; text-shadow: 0 0 5px #ff00ff;">Admin</a>
+        {% endif %}
+        
+        <a href="{{ url_for('dashboard') }}">Dashboard</a>
+        <a href="{{ url_for('profile') }}">Profile</a>
+        <a href="{{ url_for('projects') }}">Projects</a>
+        <a href="{{ url_for('logout') }}">Logout</a>
+      
+      {% else %}
+        <a href="{{ url_for('login') }}">Login</a>
+        <a href="{{ url_for('register') }}">Register</a>
+      {% endif %}
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %} 
+      {% if messages %}
+        <div class="flash-area">
+          {% for cat, msg in messages %}
+            <div class="alert alert-{{ cat }}">{{ msg }}</div>
+          {% endfor %}
+        </div>
+      {% endif %} 
+    {% endwith %}
+
+    <div class="content">
+      {% block content %}{% endblock %}
+    </div>
+
+  </body>
+</html>

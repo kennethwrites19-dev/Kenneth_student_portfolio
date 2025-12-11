@@ -1,0 +1,142 @@
+{% extends "layout.html" %}
+{% block title %}Admin Dashboard{% endblock %}
+{% block content %}
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+  /* --- GLOBAL STYLES (Copied from Home) --- */
+  html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: 'Rajdhani', sans-serif;
+    background: radial-gradient(circle at center, #1bffff 0%, #00214d 100%);
+    color: #d0d0d0;
+    overflow-x: hidden;   
+  }
+
+  /* Override existing layout backgrounds */
+  main, .content, .container {
+    background: transparent !important;
+    box-shadow: none !important;
+    position: relative;
+    z-index: 1; 
+  }
+
+  /* Animated Grid Background */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(
+        to right,
+        rgba(0, 255, 255, 0.05) 0px,
+        rgba(0, 255, 255, 0.05) 1px,
+        transparent 1px,
+        transparent 60px
+      ),
+      repeating-linear-gradient(
+        to bottom,
+        rgba(0, 255, 255, 0.05) 0px,
+        rgba(0, 255, 255, 0.05) 1px,
+        transparent 1px,
+        transparent 60px
+      );
+    animation: gridmove 20s linear infinite;
+    z-index: -1; 
+    pointer-events: none; 
+  }
+
+  @keyframes gridmove {
+    from { background-position: 0 0; }
+    to { background-position: 60px 60px; }
+  }
+
+  /* --- DASHBOARD CONTAINER --- */
+  /* Adapted from .home-container but wider for tables */
+  .dashboard-container {
+    background: rgba(10, 15, 20, 0.90); /* Slightly darker for readability */
+    border: 1px solid rgba(0, 255, 255, 0.3);
+    box-shadow: 0 0 30px rgba(0, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 3rem 2.5rem;
+    max-width: 1000px; /* Wider than home page */
+    margin: 4rem auto;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* --- TYPOGRAPHY --- */
+  h2, h3 {
+    font-family: 'Orbitron', sans-serif;
+    color: #00eaff;
+    text-shadow: 0 0 10px #00eaff, 0 0 25px rgba(0,255,255,0.8);
+    margin-bottom: 1rem;
+  }
+
+  h2 { font-size: 2.4rem; text-align: center; }
+  h3 { font-size: 1.5rem; margin-top: 2rem; border-bottom: 1px solid rgba(0, 255, 255, 0.2); padding-bottom: 10px; }
+
+  hr { border-color: rgba(0, 255, 255, 0.1); margin: 2rem 0; }
+
+  /* --- TABLE STYLES (Added for Dashboard) --- */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+    font-size: 1.1rem;
+  }
+
+  th {
+    text-align: left;
+    padding: 12px;
+    color: #00ffff;
+    font-family: 'Orbitron', sans-serif;
+    border-bottom: 2px solid rgba(0, 255, 255, 0.4);
+    letter-spacing: 1px;
+  }
+
+  td {
+    padding: 12px;
+    border-bottom: 1px solid rgba(0, 255, 255, 0.1);
+    color: #bfbfbf;
+  }
+
+  tr:hover td {
+    background: rgba(0, 255, 255, 0.05); /* Hover effect for rows */
+    color: #fff;
+  }
+
+</style>
+
+<div class="dashboard-container">
+  <h2>Admin Dashboard</h2>
+  
+  <h3>Users</h3>
+  <table>
+    <tr><th>ID</th><th>Username</th><th>Email</th><th>Course</th></tr>
+    {% for u in users %}
+    <tr>
+      <td>{{ u.id }}</td>
+      <td>{{ u.username }}</td>
+      <td>{{ u.email }}</td>
+      <td>{{ u.course or '-' }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+
+  <hr>
+
+  <h3>All Projects</h3>
+  <table>
+    <tr><th>ID</th><th>Title</th><th>Owner</th></tr>
+    {% for p in projects %}
+    <tr>
+      <td>{{ p.id }}</td>
+      <td>{{ p.title }}</td>
+      <td>{{ p.user_id }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+</div>
+{% endblock %}

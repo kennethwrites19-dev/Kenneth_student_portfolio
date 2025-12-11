@@ -1,0 +1,167 @@
+{% extends "layout.html" %}
+{% block title %}Register{% endblock %}
+{% block content %}
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+  html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: 'Rajdhani', sans-serif;
+    background: radial-gradient(circle at center, #1bffff 0%, #00214d 100%);
+    color: #d0d0d0;
+    overflow-x: hidden;
+  }
+
+  main, .content, .container {
+    background: transparent !important;
+    box-shadow: none !important;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Animated neon grid */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(
+        to right,
+        rgba(0, 255, 255, 0.05) 0px,
+        rgba(0, 255, 255, 0.05) 1px,
+        transparent 1px,
+        transparent 60px
+      ),
+      repeating-linear-gradient(
+        to bottom,
+        rgba(0, 255, 255, 0.05) 0px,
+        rgba(0, 255, 255, 0.05) 1px,
+        transparent 1px,
+        transparent 60px
+      );
+    animation: gridmove 20s linear infinite;
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  @keyframes gridmove {
+    from { background-position: 0 0; }
+    to { background-position: 60px 60px; }
+  }
+
+  /* Register container */
+  .register-container {
+    background: rgba(10, 15, 20, 0.85);
+    border: 1px solid rgba(0, 255, 255, 0.3);
+    box-shadow: 0 0 30px rgba(0, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 3rem 2.5rem;
+    max-width: 480px;
+    margin: 6rem auto;
+    text-align: center;
+  }
+
+  h2 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 2.2rem;
+    color: #00eaff;
+    text-shadow: 0 0 10px #00eaff, 0 0 25px rgba(0,255,255,0.8);
+    margin-bottom: 2rem;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    align-items: stretch;
+  }
+
+  label {
+    font-weight: 600;
+    color: #00ffff;
+    text-shadow: 0 0 5px rgba(0,255,255,0.5);
+    font-size: 1.1rem;
+    text-align: left;
+  }
+
+  input[type="text"],
+  input[type="email"],
+  input[type="password"] {
+    background: rgba(5, 10, 15, 0.9);
+    border: 1px solid rgba(0, 255, 255, 0.3);
+    border-radius: 8px;
+    color: #00ffff;
+    padding: 0.8rem 1rem;
+    font-size: 1rem;
+    outline: none;
+    transition: all 0.3s ease;
+  }
+
+  input:focus {
+    border-color: #00ffff;
+    box-shadow: 0 0 15px rgba(0,255,255,0.5);
+  }
+
+  button {
+    background: linear-gradient(90deg, #00ffff, #0077ff);
+    color: #0a0a0a;
+    font-weight: 700;
+    font-size: 1rem;
+    border: none;
+    border-radius: 6px;
+    padding: 12px 24px;
+    cursor: pointer;
+    box-shadow: 0 0 15px rgba(0,255,255,0.4);
+    transition: all 0.3s ease;
+    margin-top: 0.5rem;
+  }
+
+  button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 0 25px rgba(0,255,255,0.8);
+  }
+
+  .register-links {
+    margin-top: 1.5rem;
+    font-size: 0.95rem;
+  }
+
+  .register-links a {
+    color: #00ffff;
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .register-links a:hover {
+    color: #ffffff;
+    text-shadow: 0 0 8px #00ffff;
+  }
+</style>
+
+<div class="register-container">
+  <h2>🧬 Register</h2>
+  <form method="POST">
+    <div>
+      <label>Username:</label>
+      <input type="text" name="username" required />
+    </div>
+
+    <div>
+      <label>Email:</label>
+      <input type="email" name="email" required />
+    </div>
+
+    <div>
+      <label>Password:</label>
+      <input type="password" name="password" required />
+    </div>
+
+    <button type="submit">🚀 Register</button>
+  </form>
+
+  <div class="register-links">
+    <p>Already have an account? <a href="{{ url_for('login') }}">Login here</a>.</p>
+  </div>
+</div>
+{% endblock %}

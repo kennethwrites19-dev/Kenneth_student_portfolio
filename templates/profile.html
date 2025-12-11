@@ -1,0 +1,273 @@
+{% extends "layout.html" %}
+{% block title %}Profile Settings{% endblock %}
+{% block content %}
+
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<style>
+  /* --- THEME & VARIABLES --- */
+  :root {
+    --neon-cyan: #00ffff;
+    --neon-blue: #0077ff;
+    --glass-bg: rgba(10, 15, 20, 0.75);
+    --glass-border: rgba(0, 255, 255, 0.2);
+    --text-main: #e0e0e0;
+    --text-muted: #94a3b8;
+    --input-bg: rgba(0, 0, 0, 0.5);
+    --danger: #ef4444;
+  }
+
+  body {
+    background: radial-gradient(circle at center, #1bffff 0%, #00214d 100%) !important;
+    background-size: cover; background-attachment: fixed;
+    color: var(--text-main); font-family: 'Rajdhani', sans-serif;
+  }
+
+  /* --- LAYOUT GRID --- */
+  .settings-container {
+    max-width: 1000px; margin: 4rem auto; padding: 0 20px;
+    display: grid; grid-template-columns: 260px 1fr; gap: 2rem;
+  }
+
+  /* --- GLASS PANELS --- */
+  .glass-panel {
+    background: var(--glass-bg); border: 1px solid var(--glass-border);
+    backdrop-filter: blur(12px); border-radius: 12px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+  }
+
+  /* --- SIDEBAR --- */
+  .nav-header { padding: 2rem 1.5rem; text-align: center; border-bottom: 1px solid var(--glass-border); background: rgba(0, 255, 255, 0.03); }
+  .nav-avatar { width: 90px; height: 90px; border-radius: 50%; object-fit: cover; margin-bottom: 12px; border: 2px solid var(--neon-cyan); box-shadow: 0 0 15px rgba(0, 255, 255, 0.2); }
+  .nav-user-name { font-size: 1.4rem; font-weight: 700; color: #fff; letter-spacing: 0.5px; }
+  
+  .nav-links { padding: 10px 0; }
+  .nav-btn {
+    width: 100%; text-align: left; background: none; border: none; padding: 16px 24px;
+    font-family: 'Rajdhani', sans-serif; font-size: 1.1rem; color: var(--text-muted);
+    cursor: pointer; border-left: 3px solid transparent; transition: all 0.3s ease; font-weight: 500;
+  }
+  .nav-btn:hover { background: rgba(0, 255, 255, 0.05); color: #fff; }
+  .nav-btn.active { background: linear-gradient(90deg, rgba(0, 255, 255, 0.1), transparent); color: var(--neon-cyan); border-left-color: var(--neon-cyan); text-shadow: 0 0 8px rgba(0, 255, 255, 0.4); }
+  .nav-btn i { width: 25px; margin-right: 10px; text-align: center; }
+
+  /* --- CONTENT AREA --- */
+  .settings-content { padding: 3rem; }
+  .section-title { font-size: 1.8rem; font-weight: 700; margin-bottom: 1.5rem; color: #fff; text-transform: uppercase; border-bottom: 1px solid var(--glass-border); padding-bottom: 0.5rem; }
+
+  /* --- FORMS --- */
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+  .full-width { grid-column: span 2; }
+  
+  label { display: block; font-size: 1rem; color: var(--neon-cyan); margin-bottom: 0.5rem; font-weight: 600; }
+  
+  input, select, textarea {
+    width: 100%; padding: 12px 15px; background: var(--input-bg);
+    border: 1px solid var(--glass-border); border-radius: 6px;
+    color: #fff; font-family: 'Rajdhani', sans-serif; font-size: 1.1rem; transition: all 0.3s;
+  }
+  input:focus, select:focus, textarea:focus { outline: none; border-color: var(--neon-cyan); box-shadow: 0 0 10px rgba(0, 255, 255, 0.2); background: rgba(0, 0, 0, 0.7); }
+  textarea { resize: vertical; min-height: 120px; }
+
+  /* --- CERTIFICATION ROW STYLING --- */
+  .cert-row {
+    display: grid; grid-template-columns: 2fr 1.5fr 1fr auto; gap: 10px; margin-bottom: 10px; align-items: center;
+    animation: fadeIn 0.3s ease;
+  }
+  .cert-row input { padding: 8px 12px; font-size: 1rem; }
+  
+  .btn-icon {
+    background: rgba(239, 68, 68, 0.1); border: 1px solid var(--danger); color: var(--danger);
+    width: 40px; height: 40px; border-radius: 4px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s;
+  }
+  .btn-icon:hover { background: var(--danger); color: white; }
+  
+  .btn-add-cert {
+    background: rgba(0, 255, 255, 0.1); border: 1px dashed var(--neon-cyan); color: var(--neon-cyan);
+    width: 100%; padding: 10px; border-radius: 6px; cursor: pointer; transition: 0.2s; font-family: 'Rajdhani'; font-weight: 600; margin-top: 10px;
+  }
+  .btn-add-cert:hover { background: rgba(0, 255, 255, 0.2); box-shadow: 0 0 10px rgba(0, 255, 255, 0.2); }
+
+  /* --- BUTTONS --- */
+  .btn-primary {
+    background: linear-gradient(90deg, var(--neon-cyan), var(--neon-blue));
+    color: #000; padding: 12px 30px; border: none; border-radius: 4px;
+    font-weight: 700; font-size: 1.1rem; text-transform: uppercase;
+    cursor: pointer; box-shadow: 0 0 15px rgba(0, 255, 255, 0.3); transition: 0.3s;
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 0 25px rgba(0, 255, 255, 0.6); }
+
+  /* --- TABS --- */
+  .tab-pane { display: none; animation: fadeIn 0.4s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+  @media (max-width: 768px) {
+    .settings-container { grid-template-columns: 1fr; }
+    .form-grid { grid-template-columns: 1fr; }
+    .full-width { grid-column: span 1; }
+    .cert-row { grid-template-columns: 1fr; gap: 5px; padding: 10px; border: 1px solid var(--glass-border); border-radius: 6px; }
+    .btn-icon { width: 100%; margin-top: 5px; }
+  }
+</style>
+
+<div class="settings-container">
+  <aside class="glass-panel settings-nav">
+    <div class="nav-header">
+      <img src="{{ current_user.avatar_url or 'https://ui-avatars.com/api/?name=' + current_user.username + '&background=00ffff&color=000' }}" alt="Profile" class="nav-avatar">
+      <div class="nav-user-name">{{ current_user.username }}</div>
+    </div>
+    <div class="nav-links">
+      <button type="button" class="nav-btn active" onclick="switchTab(event, 'general')"><i class="fas fa-user-astronaut"></i> General</button>
+      <button type="button" class="nav-btn" onclick="switchTab(event, 'professional')"><i class="fas fa-briefcase"></i> Portfolio</button>
+      <button type="button" class="nav-btn" onclick="switchTab(event, 'security')"><i class="fas fa-shield-alt"></i> Security</button>
+      <div style="border-top: 1px solid var(--glass-border); margin: 10px 20px;"></div>
+      <a href="{{ url_for('public_portfolio', username=current_user.username) }}" target="_blank" class="nav-btn"><i class="fas fa-external-link-alt"></i> Public View</a>
+    </div>
+  </aside>
+
+  <main class="glass-panel settings-content">
+    <form method="POST">
+      
+      <div id="general" class="tab-pane">
+        <h2 class="section-title">General Profile</h2>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Display Name</label>
+            <input type="text" name="username" value="{{ current_user.username }}">
+          </div>
+          <div class="form-group">
+            <label>Current Status</label>
+            <select name="status">
+              <option value="Open to Work" {% if current_user.status == 'Open to Work' %}selected{% endif %}>🟢 Open to Work</option>
+              <option value="Studying" {% if current_user.status == 'Studying' %}selected{% endif %}>🟡 Studying</option>
+              <option value="Freelancing" {% if current_user.status == 'Freelancing' %}selected{% endif %}>🔵 Freelancing</option>
+              <option value="Busy" {% if current_user.status == 'Busy' %}selected{% endif %}>🔴 Busy / Offline</option>
+            </select>
+          </div>
+          <div class="full-width form-group">
+            <label>Headline / Tagline</label>
+            <input type="text" name="tagline" value="{{ current_user.tagline }}">
+          </div>
+          <div class="full-width form-group">
+            <label>Professional Bio</label>
+            <textarea name="bio">{{ current_user.bio }}</textarea>
+          </div>
+          <div class="full-width form-group">
+            <label>Avatar URL</label>
+            <input type="text" name="avatar_url" value="{{ current_user.avatar_url }}" placeholder="https://...">
+          </div>
+        </div>
+      </div>
+
+      <div id="professional" class="tab-pane">
+        <h2 class="section-title">Academic & Portfolio</h2>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Degree / Course</label>
+            <input type="text" name="course" value="{{ current_user.course }}">
+          </div>
+          <div class="form-group">
+            <label>Focus Area</label>
+            <select name="faction">
+              <option value="Development" {% if current_user.faction == 'Development' %}selected{% endif %}>Development</option>
+              <option value="Design" {% if current_user.faction == 'Design' %}selected{% endif %}>Design</option>
+              <option value="Data" {% if current_user.faction == 'Data' %}selected{% endif %}>Data</option>
+              <option value="General" {% if current_user.faction == 'General' %}selected{% endif %}>General</option>
+            </select>
+          </div>
+          <div class="full-width form-group">
+            <label>Technical Skills</label>
+            <input type="text" name="skills" value="{{ current_user.skills }}">
+          </div>
+
+          <div class="full-width form-group">
+            <label><i class="fas fa-certificate"></i> Certifications & Awards</label>
+            <div style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px; border: 1px solid var(--glass-border);">
+                <div id="cert-container">
+                    {% if current_user.certifications %}
+                        {% for cert in current_user.certifications %}
+                        <div class="cert-row">
+                            <input type="text" name="cert_name[]" value="{{ cert.name }}" placeholder="Certificate Name">
+                            <input type="text" name="cert_issuer[]" value="{{ cert.issuer }}" placeholder="Issuer">
+                            <input type="text" name="cert_date[]" value="{{ cert.date }}" placeholder="Date">
+                            <button type="button" class="btn-icon" onclick="removeRow(this)"><i class="fas fa-trash"></i></button>
+                        </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+                <button type="button" class="btn-add-cert" onclick="addCertRow()">
+                    <i class="fas fa-plus"></i> Add Certification
+                </button>
+            </div>
+          </div>
+          <div class="full-width form-group">
+            <label>Public Email</label>
+            <input type="email" name="public_email" value="{{ current_user.public_email }}">
+          </div>
+          <div class="form-group">
+            <label>LinkedIn</label>
+            <input type="text" name="linkedin" value="{{ current_user.linkedin }}">
+          </div>
+          <div class="form-group">
+            <label>GitHub</label>
+            <input type="text" name="github" value="{{ current_user.github }}">
+          </div>
+        </div>
+      </div>
+
+      <div id="security" class="tab-pane">
+        <h2 class="section-title">Security</h2>
+        <div class="form-grid">
+          <div class="full-width form-group">
+            <label>New Password</label>
+            <input type="password" name="new_password">
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top: 2rem; border-top: 1px solid var(--glass-border); padding-top: 2rem; text-align: right;">
+        <button type="submit" class="btn-primary">Save Changes</button>
+      </div>
+    </form>
+  </main>
+</div>
+
+<script>
+  // Tab Switching Logic
+  function switchTab(evt, tabName) {
+    var panes = document.getElementsByClassName("tab-pane");
+    for (var i = 0; i < panes.length; i++) { panes[i].style.display = "none"; }
+    var navBtns = document.getElementsByClassName("nav-btn");
+    for (var i = 0; i < navBtns.length; i++) { navBtns[i].classList.remove("active"); }
+    document.getElementById(tabName).style.display = "block";
+    evt.currentTarget.classList.add("active");
+  }
+
+  // Initialize First Tab
+  document.addEventListener("DOMContentLoaded", function() {
+      var panes = document.getElementsByClassName("tab-pane");
+      for (var i = 0; i < panes.length; i++) { panes[i].style.display = "none"; }
+      document.getElementById('general').style.display = "block";
+  });
+
+  // Dynamic Certifications Logic
+  function addCertRow() {
+      const container = document.getElementById('cert-container');
+      const div = document.createElement('div');
+      div.className = 'cert-row';
+      div.innerHTML = `
+          <input type="text" name="cert_name[]" placeholder="Certificate Name">
+          <input type="text" name="cert_issuer[]" placeholder="Issuer">
+          <input type="text" name="cert_date[]" placeholder="Date">
+          <button type="button" class="btn-icon" onclick="removeRow(this)"><i class="fas fa-trash"></i></button>
+      `;
+      container.appendChild(div);
+  }
+
+  function removeRow(btn) {
+      btn.closest('.cert-row').remove();
+  }
+</script>
+
+{% endblock %}

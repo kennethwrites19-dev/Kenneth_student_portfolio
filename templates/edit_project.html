@@ -1,0 +1,128 @@
+{% extends "layout.html" %}
+{% block title %}Edit Project{% endblock %}
+{% block content %}
+
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+  /* --- FORM CONTAINER --- */
+  .form-container {
+    background: rgba(10, 15, 20, 0.85);
+    border: 1px solid rgba(0, 255, 255, 0.3);
+    box-shadow: 0 0 30px rgba(0, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 3rem 2.5rem;
+    max-width: 600px;
+    margin: 6rem auto;
+    position: relative;
+    z-index: 2;
+  }
+
+  h2 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 2.2rem;
+    color: #00eaff;
+    text-shadow: 0 0 10px #00eaff, 0 0 25px rgba(0,255,255,0.8);
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+
+  /* --- INPUT STYLES --- */
+  label {
+    display: block;
+    color: #00ffff;
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    font-family: 'Orbitron', sans-serif;
+  }
+
+  input[type="text"], 
+  textarea,
+  input[type="file"] {
+    width: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(0, 255, 255, 0.3);
+    color: #fff;
+    padding: 12px;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 1.1rem;
+    border-radius: 6px;
+    margin-bottom: 1.5rem;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+  }
+
+  textarea { min-height: 150px; resize: vertical; }
+
+  /* Glow on Focus */
+  input[type="text"]:focus, 
+  textarea:focus {
+    outline: none;
+    border-color: #00ffff;
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
+    background: rgba(0, 0, 0, 0.6);
+  }
+
+  button {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(90deg, #00ffff, #0077ff);
+    color: #0a0a0a;
+    font-weight: 700;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.4);
+    font-family: 'Orbitron', sans-serif;
+  }
+
+  button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 0 25px rgba(0, 255, 255, 0.8);
+  }
+
+  /* Image Preview Style */
+  .current-img-container {
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+  .preview-img {
+    border: 2px solid #00ffff;
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.2);
+    max-width: 100%;
+    height: auto;
+  }
+</style>
+
+<div class="form-container">
+  <h2>Edit Project</h2>
+  
+  <form method="POST" enctype="multipart/form-data">
+    
+    <label>Title:</label>
+    <input type="text" name="title" value="{{ project.title }}" required>
+    
+    <label>Description:</label>
+    <textarea name="description">{{ project.description }}</textarea>
+    
+    <label>Current Image:</label>
+    <div class="current-img-container">
+      {% if project.image_file %}
+        <img src="{{ url_for('static', filename='uploads/' + project.image_file) }}" class="preview-img" width="200">
+      {% else %}
+        <p style="color: #666;">No image currently set.</p>
+      {% endif %}
+    </div>
+
+    <label>Update Image (Optional):</label>
+    <input type="file" name="image" accept="image/*">
+    
+    <button type="submit">Save Changes</button>
+  
+  </form>
+</div>
+{% endblock %}

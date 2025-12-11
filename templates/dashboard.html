@@ -1,0 +1,167 @@
+{% extends "layout.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+  html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: 'Rajdhani', sans-serif;
+    background: radial-gradient(circle at center, #1bffff 0%, #00214d 100%);
+    color: #d0d0d0;
+    overflow-x: hidden;
+  }
+
+  /* Make sure navbar and content stay clickable */
+  main, .content, .container {
+    background: transparent !important;
+    box-shadow: none !important;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Animated neon grid background */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(
+        to right,
+        rgba(0, 255, 255, 0.05) 0px,
+        rgba(0, 255, 255, 0.05) 1px,
+        transparent 1px,
+        transparent 60px
+      ),
+      repeating-linear-gradient(
+        to bottom,
+        rgba(0, 255, 255, 0.05) 0px,
+        rgba(0, 255, 255, 0.05) 1px,
+        transparent 1px,
+        transparent 60px
+      );
+    animation: gridmove 20s linear infinite;
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  @keyframes gridmove {
+    from { background-position: 0 0; }
+    to { background-position: 60px 60px; }
+  }
+
+  /* Dashboard content */
+  .dashboard-container {
+    background: rgba(10, 15, 20, 0.85);
+    border: 1px solid rgba(0, 255, 255, 0.3);
+    box-shadow: 0 0 30px rgba(0, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 3rem 2.5rem;
+    max-width: 900px;
+    margin: 4rem auto;
+    position: relative;
+    z-index: 2;
+  }
+
+  h2 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 2.2rem;
+    color: #00eaff;
+    text-shadow: 0 0 10px #00eaff, 0 0 25px rgba(0,255,255,0.8);
+    margin-bottom: 1rem;
+  }
+
+  h3 {
+    font-family: 'Orbitron', sans-serif;
+    color: #00ffff;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  p {
+    color: #bfbfbf;
+    font-size: 1rem;
+  }
+
+  a {
+    color: #00ffff;
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  a:hover {
+    color: #ffffff;
+  }
+
+  a.btn {
+    display: inline-block;
+    padding: 10px 22px;
+    background: linear-gradient(90deg, #00ffff, #0077ff);
+    color: #0a0a0a;
+    font-weight: 700;
+    border-radius: 6px;
+    text-decoration: none;
+    margin-top: 1rem;
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.4);
+    transition: transform 0.2s ease, box-shadow 0.3s ease;
+  }
+
+  a.btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 0 25px rgba(0, 255, 255, 0.8);
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  li {
+    background: rgba(5, 10, 15, 0.9);
+    border: 1px solid rgba(0, 255, 255, 0.2);
+    border-radius: 8px;
+    padding: 0.8rem 1rem;
+    margin: 0.6rem 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s ease;
+  }
+
+  li:hover {
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+    transform: translateY(-3px);
+  }
+
+  li a {
+    color: #00ffff;
+    font-weight: 600;
+  }
+
+  li a:hover {
+    text-shadow: 0 0 8px #00ffff;
+  }
+</style>
+
+<div class="dashboard-container">
+  <h2>Hello, {{ current_user.username }}!</h2>
+  <p>
+    <a href="{{ url_for('public_portfolio', username=current_user.username) }}" target="_blank" class="btn">
+      🌐 View My Public Portfolio
+    </a>
+  </p>
+
+  <h3>Your Projects</h3>
+  <ul>
+    {% for p in projects %}
+    <li>
+      <span>{{ p.title }}</span>
+      <a href="{{ url_for('edit_project', id=p.id) }}">Edit</a>
+    </li>
+    {% else %}
+    <li>No projects yet.</li>
+    {% endfor %}
+  </ul>
+</div>
+{% endblock %}
